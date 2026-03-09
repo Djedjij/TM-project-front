@@ -1,6 +1,16 @@
-import axios, { type AxiosError, type AxiosRequestConfig, type AxiosResponse } from 'axios'
+import axios, {
+  type AxiosError,
+  type AxiosRequestConfig,
+  type AxiosResponse,
+  type InternalAxiosRequestConfig,
+} from 'axios'
+import { refreshToken } from './authorization'
 
 export type { AxiosRequestConfig }
+
+interface CustomAxiosRequestConfig extends InternalAxiosRequestConfig {
+  _retry?: boolean
+}
 
 export class ApiError extends Error {
   status?: number
@@ -23,6 +33,7 @@ export const apiClient = axios.create({
   //todo: change url
   baseURL: 'http://localhost:5000',
   timeout: 10000,
+  withCredentials: true,
   headers: {
     'Content-Type': 'application/json',
   },
@@ -30,6 +41,10 @@ export const apiClient = axios.create({
 
 apiClient.interceptors.request.use(
   (config) => {
+    const token = localStorage.getItem('auth_token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
     return config
   },
   (error) => {
@@ -39,10 +54,23 @@ apiClient.interceptors.request.use(
 
 apiClient.interceptors.response.use(
   (response) => response,
-  (error: AxiosError) => {
+  async (error: AxiosError) => {
     if (error.response) {
+      const originalRequest = error.config as CustomAxiosRequestConfig
+
       const { status, data } = error.response
-      console.error('API Error:', status, data)
+      if (error.response.status === 401 && !originalRequest?._retry) {
+        originalRequest._retry = true
+        try {
+          const refreshData = await refreshToken()
+          if (refreshData.success) {
+            localStorage.setItem('auth_token', refreshData.data.accessToken)
+          }
+        } catch (e) {
+          localStorage.removeItem('auth_token')
+          window.location.href = '/login'
+        }
+      }
       return Promise.reject(new ApiError('API Error', { status, data }))
     }
 
