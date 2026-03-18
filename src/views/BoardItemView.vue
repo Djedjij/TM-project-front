@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import BaseStub from '@/components/base/stub/BaseStub.vue'
-import CreateTaskModal from '@/components/modals/CreateTaskModal.vue'
 import { storeToRefs } from 'pinia'
 import { useBoardsStore } from '@/stores/boards'
 import { useTasksStore } from '@/stores/tasks'
@@ -14,6 +12,7 @@ const { tasks } = storeToRefs(tasksStore)
 const route = useRoute()
 
 const openCreateTaskModal = ref(false)
+const openCreateColumnModal = ref(false)
 
 const boardId = computed(() => {
   const id = route.params.id
@@ -33,6 +32,7 @@ const onListChange = (event: any) => {
 
 const closeModal = () => {
   openCreateTaskModal.value = false
+  openCreateColumnModal.value = false
 }
 </script>
 
@@ -51,6 +51,14 @@ const closeModal = () => {
           }
         "
       />
+      <BaseButton
+        text="Создать колонку"
+        @click="
+          () => {
+            openCreateColumnModal = true
+          }
+        "
+      />
     </div>
     <div class="board">
       <draggable
@@ -61,17 +69,14 @@ const closeModal = () => {
         @change="onListChange"
         item-key="id"
       >
-        <div
-          v-for="element in tasks"
-          :key="element.id"
-          class="board__card drag-item"
-        >
+        <div v-for="element in tasks" :key="element.id" class="board__card drag-item">
           {{ element.title }}
         </div>
       </draggable>
     </div>
   </div>
   <CreateTaskModal v-model="openCreateTaskModal" :boardId="boardId" @close="closeModal" />
+  <CreateColumnModal v-model="openCreateColumnModal" :boardId="boardId" @close="closeModal" />
 </template>
 
 <style scoped>

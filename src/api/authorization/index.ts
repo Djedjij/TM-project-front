@@ -21,7 +21,6 @@ export const login = async (email: string, password: string) => {
   })
 
   const { accessToken, user } = res.data.data
-  console.log('token', accessToken)
   localStorage.setItem('auth_token', accessToken)
   return user
 }
@@ -32,4 +31,8 @@ export const tokenCheck = async () => {
 
 export const refreshToken = async () => {
   return await apiPost<TRefreshTokenResponse>('/auth/refresh')
+}
+
+export const logout = async () => {
+  return await apiPost('/auth/logout')
 }

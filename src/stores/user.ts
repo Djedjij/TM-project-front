@@ -1,9 +1,9 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
-
 import { useRouter } from 'vue-router'
-import { login, register, tokenCheck } from '@/api/authorization'
+import { login, logout, register, tokenCheck } from '@/api/authorization'
 import { TUserResponse } from '@/api/authorization/types'
+import toast from '@/components/base/toast/toast'
 
 type TRegisterData = {
   email: string
@@ -43,9 +43,11 @@ export const useUserStore = defineStore('user', () => {
         userData.value = res
         isAuhtorized.value = true
         router.push('/boards')
+        toast.success('Вход выполнен успешно')
       }
     } catch (e) {
       console.log(e)
+      toast.error('Ошибка входа')
     }
   }
 
@@ -56,7 +58,7 @@ export const useUserStore = defineStore('user', () => {
         const res = await tokenCheck()
         if (res.success) {
           isAuhtorized.value = true
-          userData.value = res.data.user
+          userData.value = res.data
         }
       } catch (e) {
         console.log(e)
@@ -68,6 +70,20 @@ export const useUserStore = defineStore('user', () => {
     }
   }
 
+  const logoutUser = async () => {
+    try {
+      const res = await logout()
+      if (res) {
+        localStorage.removeItem('auth_token')
+        userData.value = null
+        isAuhtorized.value = false
+        router.push('/login')
+      }
+    } catch (e) {
+      console.log(e)
+    }
+  }
+
   return {
     userData,
     isAuhtorized,
@@ -75,5 +91,6 @@ export const useUserStore = defineStore('user', () => {
     registerUser,
     loginUser,
     initialize,
+    logoutUser,
   }
 })

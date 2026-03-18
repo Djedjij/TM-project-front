@@ -12,6 +12,7 @@ export {}
 /* prettier-ignore */
 declare module 'vue' {
   export interface GlobalComponents {
+    AppHeader: typeof import('./src/components/base/header/AppHeader.vue')['default']
     AppSidebar: typeof import('./src/components/base/AppSidebar.vue')['default']
     BaseButton: typeof import('./src/components/base/button/BaseButton.vue')['default']
     BaseLoader: typeof import('./src/components/base/loader/BaseLoader.vue')['default']
@@ -20,6 +21,7 @@ declare module 'vue' {
     BaseTag: typeof import('./src/components/base/tag/BaseTag.vue')['default']
     BoardCard: typeof import('./src/components/board/boardCard/BoardCard.vue')['default']
     CreateBoardModal: typeof import('./src/components/modals/CreateBoardModal.vue')['default']
+    CreateColumnModal: typeof import('./src/components/modals/CreateColumnModal.vue')['default']
     CreateTaskModal: typeof import('./src/components/modals/CreateTaskModal.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
@@ -28,9 +30,13 @@ declare module 'vue' {
     ElCol: typeof import('element-plus/es')['ElCol']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElDropdown: typeof import('element-plus/es')['ElDropdown']
+    ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+    ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
     ElEmpty: typeof import('element-plus/es')['ElEmpty']
     ElForm: typeof import('element-plus/es')['ElForm']
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
+    ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
     ElMenu: typeof import('element-plus/es')['ElMenu']
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
@@ -55,6 +61,7 @@ declare module 'vue' {
 
 // For TSX support
 declare global {
+  const AppHeader: typeof import('./src/components/base/header/AppHeader.vue')['default']
   const AppSidebar: typeof import('./src/components/base/AppSidebar.vue')['default']
   const BaseButton: typeof import('./src/components/base/button/BaseButton.vue')['default']
   const BaseLoader: typeof import('./src/components/base/loader/BaseLoader.vue')['default']
@@ -63,6 +70,7 @@ declare global {
   const BaseTag: typeof import('./src/components/base/tag/BaseTag.vue')['default']
   const BoardCard: typeof import('./src/components/board/boardCard/BoardCard.vue')['default']
   const CreateBoardModal: typeof import('./src/components/modals/CreateBoardModal.vue')['default']
+  const CreateColumnModal: typeof import('./src/components/modals/CreateColumnModal.vue')['default']
   const CreateTaskModal: typeof import('./src/components/modals/CreateTaskModal.vue')['default']
   const ElButton: typeof import('element-plus/es')['ElButton']
   const ElCard: typeof import('element-plus/es')['ElCard']
@@ -71,9 +79,13 @@ declare global {
   const ElCol: typeof import('element-plus/es')['ElCol']
   const ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
   const ElDialog: typeof import('element-plus/es')['ElDialog']
+  const ElDropdown: typeof import('element-plus/es')['ElDropdown']
+  const ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
+  const ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
   const ElEmpty: typeof import('element-plus/es')['ElEmpty']
   const ElForm: typeof import('element-plus/es')['ElForm']
   const ElFormItem: typeof import('element-plus/es')['ElFormItem']
+  const ElIcon: typeof import('element-plus/es')['ElIcon']
   const ElInput: typeof import('element-plus/es')['ElInput']
   const ElMenu: typeof import('element-plus/es')['ElMenu']
   const ElMenuItem: typeof import('element-plus/es')['ElMenuItem']

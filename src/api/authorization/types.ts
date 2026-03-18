@@ -14,7 +14,5 @@ export type TRefreshTokenResponse = {
 
 export type TInitializeResponse = {
   success: boolean
-  data: {
-    user: TUserResponse
-  }
+  data: TUserResponse
 }
