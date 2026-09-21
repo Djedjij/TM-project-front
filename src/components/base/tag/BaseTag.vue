@@ -28,11 +28,13 @@ const getTypeForTag = (type: string) => {
 </script>
 
 <template>
-  <el-tag class="tag" :type="getTypeForTag(type)">{{ text }}</el-tag>
+  <el-tag class="tag" :type="getTypeForTag(type)" :size="size">{{ text }}</el-tag>
 </template>
 
 <style lang="scss" scoped>
 .tag {
-  padding: 4px;
+  padding: 3px 10px;
+  font-weight: 500;
+  border-radius: var(--app-radius-pill);
 }
 </style>

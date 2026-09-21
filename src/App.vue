@@ -24,7 +24,13 @@ onMounted(() => userStore.initialize())
   flex-direction: column;
   min-height: 100vh;
   width: 100%;
-  background-color: var(--el-fill-color-light, #f5f7fa);
+  color: var(--el-text-color-primary);
+  background-color: var(--app-bg);
+  background-image: radial-gradient(circle at 20% 0%, var(--app-bg-glow), transparent 55%);
+  background-attachment: fixed;
+  transition:
+    background-color var(--app-transition-slow),
+    color var(--app-transition-slow);
 }
 
 .app-main {
@@ -32,12 +38,20 @@ onMounted(() => userStore.initialize())
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 24px;
+  padding: 32px 24px 48px;
 }
 
 .app-main_auth {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 40px 24px;
+}
+
+@media (max-width: 600px) {
+  .app-main {
+    padding: 20px 16px 32px;
+  }
 }
 </style>
+

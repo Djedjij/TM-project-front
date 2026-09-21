@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html lang="">
+<html lang="ru">
   <head>
     <meta charset="UTF-8">
     <link rel="icon" href="/favicon.ico">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vite App</title>
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f5fb">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0b0e14">
+    <title>Task Manager — проекты и задачи</title>
+    <script>
+      // Применяем тему до первой отрисовки, чтобы не было мигания светлой темы
+      ;(function () {
+        try {
+          var storageKey = 'app-theme'
+          var storedTheme = localStorage.getItem(storageKey)
+          var isDark = storedTheme
+            ? storedTheme === 'dark'
+            : window.matchMedia('(prefers-color-scheme: dark)').matches
+
+          if (isDark) {
+            document.documentElement.classList.add('dark')
+          }
+        } catch (error) {
+          // если localStorage недоступен — остаёмся в светлой теме
+        }
+      })()
+    </script>
   </head>
   <body>
     <div id="app"></div>

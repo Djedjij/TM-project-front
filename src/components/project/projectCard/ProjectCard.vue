@@ -29,7 +29,7 @@ const openProject = () => {
 
 <template>
   <el-card
-    class="wrapper"
+    class="card"
     shadow="hover"
     role="button"
     tabindex="0"
@@ -37,34 +37,43 @@ const openProject = () => {
     @keydown.enter.prevent="openProject"
   >
     <template #header>
-      <div class="wrapper__header">
-        <h3 class="wrapper__title">{{ project.title }}</h3>
+      <div class="card__header">
+        <h3 class="card__title">{{ project.title }}</h3>
         <BaseTag v-if="project.status" :type="project.status" :text="projectStatusTitle" />
       </div>
     </template>
 
-    <p class="wrapper__description">{{ project.description || 'Описание не заполнено' }}</p>
+    <p class="card__description">{{ project.description || 'Описание не заполнено' }}</p>
 
-    <span class="wrapper__footer">
+    <span class="card__footer">
       Открыть проект
-      <el-icon><ArrowRight /></el-icon>
+      <el-icon class="card__footer-icon"><ArrowRight /></el-icon>
     </span>
   </el-card>
 </template>
 
 <style scoped lang="scss">
-.wrapper {
+.card {
+  --el-card-border-color: var(--app-border);
+  --el-card-border-radius: var(--app-radius);
+  --el-card-padding: 20px;
+
   display: flex;
   flex-direction: column;
   height: 100%;
   min-height: 180px;
   cursor: pointer;
   transition:
-    transform 0.2s ease,
-    box-shadow 0.2s ease;
+    transform var(--app-transition),
+    box-shadow var(--app-transition),
+    border-color var(--app-transition);
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
+
+    .card__footer-icon {
+      transform: translateX(4px);
+    }
   }
 
   &__header {
@@ -76,15 +85,15 @@ const openProject = () => {
 
   &__title {
     font-size: 16px;
-    font-weight: 600;
-    color: var(--el-text-color-primary, #303133);
+    color: var(--el-text-color-primary);
     word-break: break-word;
   }
 
   &__description {
+    flex: 1;
     font-size: 14px;
     line-height: 1.5;
-    color: var(--el-text-color-regular, #606266);
+    color: var(--el-text-color-regular);
     display: -webkit-box;
     -webkit-line-clamp: 3;
     line-clamp: 3;
@@ -96,11 +105,19 @@ const openProject = () => {
     display: flex;
     align-items: center;
     gap: 6px;
-    margin-top: auto;
-    padding-top: 16px;
+    margin-top: 16px;
     font-size: 14px;
-    color: var(--el-color-primary, #409eff);
+    font-weight: 500;
+    color: var(--el-color-primary);
   }
+
+  &__footer-icon {
+    transition: transform var(--app-transition);
+  }
+}
+
+:deep(.el-card__header) {
+  border-bottom: 1px solid var(--app-border);
 }
 
 :deep(.el-card__body) {

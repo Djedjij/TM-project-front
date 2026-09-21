@@ -57,15 +57,17 @@ onMounted(() => projectsStore.loadProjects())
   }
 
   &__title {
-    font-size: 28px;
-    font-weight: 600;
-    color: var(--el-text-color-primary, #303133);
+    font-size: 30px;
+    letter-spacing: -0.02em;
+    color: var(--el-text-color-primary);
   }
 
   &__subtitle {
-    margin-top: 6px;
-    font-size: 14px;
-    color: var(--el-text-color-secondary, #909399);
+    max-width: 620px;
+    margin-top: 8px;
+    font-size: 15px;
+    line-height: 1.5;
+    color: var(--el-text-color-secondary);
   }
 
   &__loader {
@@ -77,6 +79,6 @@ onMounted(() => projectsStore.loadProjects())
 .projects {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
+  gap: 20px;
 }
 </style>

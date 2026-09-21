@@ -110,12 +110,22 @@ const closeCreateTaskModal = () => {
 
   &__back {
     align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-left: -10px;
+    padding: 4px 10px;
     font-size: 14px;
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--el-text-color-secondary);
     text-decoration: none;
+    border-radius: var(--app-radius-pill);
+    transition:
+      color var(--app-transition),
+      background-color var(--app-transition);
 
     &:hover {
-      color: var(--el-color-primary, #409eff);
+      color: var(--el-color-primary);
+      background-color: var(--app-surface-muted);
     }
   }
 
@@ -133,9 +143,13 @@ const closeCreateTaskModal = () => {
   gap: 24px;
   flex-wrap: wrap;
   padding: 24px;
-  background-color: var(--el-bg-color, #fff);
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  background-color: var(--app-surface);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius);
+  box-shadow: var(--app-shadow-sm);
+  transition:
+    background-color var(--app-transition-slow),
+    border-color var(--app-transition-slow);
 
   &__title-row {
     display: flex;
@@ -146,16 +160,16 @@ const closeCreateTaskModal = () => {
 
   &__title {
     font-size: 24px;
-    font-weight: 600;
-    color: var(--el-text-color-primary, #303133);
+    letter-spacing: -0.01em;
+    color: var(--el-text-color-primary);
   }
 
   &__description {
     max-width: 720px;
     margin-top: 10px;
     font-size: 14px;
-    line-height: 1.5;
-    color: var(--el-text-color-regular, #606266);
+    line-height: 1.6;
+    color: var(--el-text-color-regular);
   }
 
   &__meta {
@@ -164,7 +178,7 @@ const closeCreateTaskModal = () => {
     flex-wrap: wrap;
     margin-top: 14px;
     font-size: 13px;
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--el-text-color-secondary);
   }
 }
 
@@ -176,21 +190,27 @@ const closeCreateTaskModal = () => {
   &__header {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
   }
 
   &__title {
     font-size: 20px;
-    font-weight: 600;
-    color: var(--el-text-color-primary, #303133);
+    color: var(--el-text-color-primary);
   }
 
   &__count {
-    padding: 2px 10px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 30px;
+    height: 22px;
+    padding: 0 10px;
     font-size: 13px;
-    color: var(--el-text-color-secondary, #909399);
-    background-color: var(--el-fill-color-light, #f5f7fa);
-    border-radius: 12px;
+    font-weight: 500;
+    color: var(--el-color-primary);
+    background-color: var(--el-color-primary-light-9);
+    border: 1px solid var(--el-color-primary-light-8);
+    border-radius: var(--app-radius-pill);
   }
 
   &__list {

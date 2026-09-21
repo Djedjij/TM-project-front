@@ -1,5 +1,7 @@
 <script lang="ts" setup>
 import { computed, reactive } from 'vue'
+import BaseButton from '@/components/base/button/BaseButton.vue'
+import BaseModal from '@/components/base/modal/BaseModal.vue'
 import { TColumnCreateRequest } from '@/api/columns/types'
 import { useColumnsStore } from '@/stores/columns'
 
@@ -29,16 +31,32 @@ const onSubmit = async () => {
 </script>
 
 <template>
-  <BaseModal v-model="dialogVisible" title="Новая Колонка">
-    <el-form :model="form" label-width="auto" style="max-width: 600px">
+  <BaseModal v-model="dialogVisible" title="Новая колонка">
+    <el-form :model="form" label-width="auto" class="form">
       <el-form-item label="Название столбца">
-        <el-input v-model="form.title" />
+        <el-input v-model="form.title" placeholder="Например: В работе" />
       </el-form-item>
       <el-form-item label="Статус">
-        <el-input v-model="form.status" />
+        <el-input v-model="form.status" placeholder="in_progress" />
       </el-form-item>
-      <el-button type="primary" @click="onSubmit">Create</el-button>
-      <el-button>Cancel</el-button>
+      <div class="form__actions">
+        <BaseButton type="primary" text="Создать" @click="onSubmit" />
+        <BaseButton type="default" text="Отменить" @click="dialogVisible = false" />
+      </div>
     </el-form>
   </BaseModal>
 </template>
+
+<style scoped lang="scss">
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  &__actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+  }
+}
+</style>

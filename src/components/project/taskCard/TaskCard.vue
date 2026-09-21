@@ -15,13 +15,17 @@ const createdAt = computed(() =>
 const dueAt = computed(() => (props.task.dueAt ? dayjs(props.task.dueAt).format('DD.MM.YYYY') : ''))
 
 const dueTitle = computed(() => (dueAt.value ? `до ${dueAt.value}` : ''))
+
+const isOverdue = computed(
+  () => !!props.task.dueAt && dayjs(props.task.dueAt).isBefore(dayjs(), 'day'),
+)
 </script>
 
 <template>
-  <div class="task">
+  <div class="task" :class="{ task_overdue: isOverdue }">
     <div class="task__header">
       <h4 class="task__title">{{ task.title }}</h4>
-      <BaseTag v-if="dueTitle" type="warning" :text="dueTitle" />
+      <BaseTag v-if="dueTitle" :type="isOverdue ? 'danger' : 'warning'" :text="dueTitle" />
     </div>
 
     <p v-if="task.description" class="task__description">{{ task.description }}</p>
@@ -32,17 +36,39 @@ const dueTitle = computed(() => (dueAt.value ? `до ${dueAt.value}` : ''))
 
 <style scoped lang="scss">
 .task {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 16px;
-  background-color: var(--el-bg-color, #fff);
-  border: 1px solid var(--el-border-color-lighter, #ebeef5);
-  border-radius: 8px;
-  transition: box-shadow 0.2s ease;
+  padding: 16px 16px 16px 19px;
+  overflow: hidden;
+  background-color: var(--app-surface-raised);
+  border: 1px solid var(--app-border);
+  border-radius: var(--app-radius-sm);
+  box-shadow: var(--app-shadow-sm);
+  transition:
+    transform var(--app-transition),
+    box-shadow var(--app-transition),
+    background-color var(--app-transition-slow),
+    border-color var(--app-transition-slow);
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: 3px;
+    background-color: var(--el-color-primary);
+  }
 
   &:hover {
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    transform: translateY(-2px);
+    box-shadow: var(--app-shadow-md);
+  }
+
+  &_overdue::before {
+    background-color: var(--el-color-danger);
   }
 
   &__header {
@@ -54,21 +80,21 @@ const dueTitle = computed(() => (dueAt.value ? `до ${dueAt.value}` : ''))
 
   &__title {
     font-size: 15px;
-    font-weight: 600;
-    color: var(--el-text-color-primary, #303133);
+    color: var(--el-text-color-primary);
     word-break: break-word;
   }
 
   &__description {
     font-size: 13px;
     line-height: 1.5;
-    color: var(--el-text-color-regular, #606266);
+    color: var(--el-text-color-regular);
     word-break: break-word;
   }
 
   &__date {
+    margin-top: auto;
     font-size: 12px;
-    color: var(--el-text-color-secondary, #909399);
+    color: var(--el-text-color-secondary);
   }
 }
 </style>
