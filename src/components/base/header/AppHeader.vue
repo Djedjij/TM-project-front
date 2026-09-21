@@ -6,8 +6,8 @@ import { useUserStore } from '@/stores/user'
 
 const userStore = useUserStore()
 
-const userName = computed(() => userStore.userData?.name || 'Пользователь')
-const userInitial = computed(() => userName.value.trim().charAt(0).toUpperCase() || 'U')
+const userName = computed(() => userStore.userData?.email || 'Пользователь')
+const userInitial = computed(() => userName.value.trim().charAt(0).toUpperCase() || 'User')
 
 const { logoutUser } = userStore
 </script>
@@ -54,7 +54,6 @@ const { logoutUser } = userStore
     border-color var(--app-transition-slow);
 
   &__inner {
-    max-width: 1200px;
     height: 64px;
     margin: 0 auto;
     padding: 0 24px;

@@ -36,7 +36,6 @@ onMounted(() => userStore.initialize())
 .app-main {
   flex: 1;
   width: 100%;
-  max-width: 1200px;
   margin: 0 auto;
   padding: 32px 24px 48px;
 }
@@ -54,4 +53,3 @@ onMounted(() => userStore.initialize())
   }
 }
 </style>
-

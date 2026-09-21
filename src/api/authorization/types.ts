@@ -1,5 +1,4 @@
 export type TUserResponse = {
-  name: string
   email: string
   id: string
 }
