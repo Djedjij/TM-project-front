@@ -29,7 +29,7 @@ export const useUserStore = defineStore('user', () => {
       if (res) {
         userData.value = res
         isAuhtorized.value = true
-        router.push('/boards')
+        router.push('/projects')
       }
     } catch (e) {
       console.log(e)
@@ -42,7 +42,7 @@ export const useUserStore = defineStore('user', () => {
       if (res) {
         userData.value = res
         isAuhtorized.value = true
-        router.push('/boards')
+        router.push('/projects')
         toast.success('Вход выполнен успешно')
       }
     } catch (e) {

@@ -7,10 +7,10 @@ export const useTasksStore = defineStore('tasks', () => {
   const tasks = ref<TTask[]>([])
   const isLoading = ref(false)
 
-  const loadTasks = async (boardId: string) => {
+  const loadTasks = async (projectId: string) => {
     try {
       isLoading.value = true
-      const res = await getTasks(boardId)
+      const res = await getTasks(projectId)
       if (res.data) {
         tasks.value = res.data
       }
@@ -26,7 +26,7 @@ export const useTasksStore = defineStore('tasks', () => {
       isLoading.value = true
       const res = await createTask(data)
       if (res) {
-        await loadTasks()
+        await loadTasks(data.project_id)
       }
     } catch (e) {
       console.log(e)

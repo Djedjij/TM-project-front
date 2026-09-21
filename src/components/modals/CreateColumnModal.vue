@@ -5,7 +5,7 @@ import { useColumnsStore } from '@/stores/columns'
 
 const props = defineProps<{
   modelValue: boolean
-  boardId: string
+  projectId: string
 }>()
 
 const emit = defineEmits(['update:modelValue'])
@@ -18,12 +18,12 @@ const dialogVisible = computed({
 const { createNewColumn } = useColumnsStore()
 const form = reactive<TColumnCreateRequest>({
   title: '',
-  board_id: props.boardId,
+  project_id: props.projectId,
   status: '',
 })
 
 const onSubmit = async () => {
-  await createNewColumn(form, props.boardId)
+  await createNewColumn(form, props.projectId)
   dialogVisible.value = false
 }
 </script>

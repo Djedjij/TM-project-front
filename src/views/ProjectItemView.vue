@@ -1,12 +1,14 @@
 <script setup lang="ts">
 import { storeToRefs } from 'pinia'
-import { useBoardsStore } from '@/stores/boards'
+import { useProjectsStore } from '@/stores/projects'
 import { useTasksStore } from '@/stores/tasks'
 import { onMounted, ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { VueDraggableNext as draggable } from 'vue-draggable-next'
-const boardStore = useBoardsStore()
+import { useColumnsStore } from '@/stores/columns'
+const projectStore = useProjectsStore()
 const tasksStore = useTasksStore()
+const columnStore = useColumnsStore()
 const { tasks } = storeToRefs(tasksStore)
 
 const route = useRoute()
@@ -14,19 +16,20 @@ const route = useRoute()
 const openCreateTaskModal = ref(false)
 const openCreateColumnModal = ref(false)
 
-const boardId = computed(() => {
+const projectId = computed(() => {
   const id = route.params.id
   return (Array.isArray(id) ? id[0] : id) || ''
 })
 
 onMounted(() => {
-  if (boardId.value) {
-    boardStore.loadBoard(boardId.value)
-    tasksStore.loadTasks(boardId.value)
+  if (projectId.value) {
+    projectStore.loadProject(projectId.value)
+    columnStore.loadColumns(projectId.value)
+    tasksStore.loadTasks(projectId.value)
   }
 })
 
-const onListChange = (event: any) => {
+const onListChange = (event: unknown) => {
   console.log('List changed:', event)
 }
 
@@ -37,11 +40,11 @@ const closeModal = () => {
 </script>
 
 <template>
-  <div v-if="!boardStore.board && !boardStore.isLoading">
-    <BaseStub description="Не удалось загрузить доску. Возможна она была удалена" />
+  <div v-if="!projectStore.project && !projectStore.isLoading">
+    <BaseStub description="Не удалось загрузить проект. Возможно он был удалён" />
   </div>
-  <div class="wrapper" v-else v-loading="boardStore.isLoading">
-    <h1>{{ boardStore.board?.title }}</h1>
+  <div class="wrapper" v-else v-loading="projectStore.isLoading">
+    <h1>{{ projectStore.project?.title }}</h1>
     <div class="wrapper-actions">
       <BaseButton
         text="Создать задачу"
@@ -60,23 +63,23 @@ const closeModal = () => {
         "
       />
     </div>
-    <div class="board">
+    <div class="project">
       <draggable
         v-model="tasks"
         group="tasks"
         tag="div"
-        class="board__list"
+        class="project__list"
         @change="onListChange"
         item-key="id"
       >
-        <div v-for="element in tasks" :key="element.id" class="board__card drag-item">
+        <div v-for="element in tasks" :key="element.id" class="project__card drag-item">
           {{ element.title }}
         </div>
       </draggable>
     </div>
   </div>
-  <CreateTaskModal v-model="openCreateTaskModal" :boardId="boardId" @close="closeModal" />
-  <CreateColumnModal v-model="openCreateColumnModal" :boardId="boardId" @close="closeModal" />
+  <CreateTaskModal v-model="openCreateTaskModal" :projectId="projectId" @close="closeModal" />
+  <CreateColumnModal v-model="openCreateColumnModal" :projectId="projectId" @close="closeModal" />
 </template>
 
 <style scoped>
@@ -86,14 +89,14 @@ const closeModal = () => {
   gap: 20px;
 }
 
-.board {
+.project {
   min-height: 200px;
   padding: 16px;
   background-color: var(--el-fill-color-light, #f5f7fa);
   border-radius: 8px;
 }
 
-.board__list {
+.project__list {
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
@@ -101,7 +104,7 @@ const closeModal = () => {
   align-content: flex-start;
 }
 
-.board__card {
+.project__card {
   padding: 12px 16px;
   min-width: 200px;
   min-height: 60px;
@@ -112,11 +115,11 @@ const closeModal = () => {
   transition: box-shadow 0.2s;
 }
 
-.board__card:hover {
+.project__card:hover {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
-.board__card:active {
+.project__card:active {
   cursor: grabbing;
 }
 </style>

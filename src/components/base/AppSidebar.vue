@@ -22,9 +22,9 @@ const menuItems: TMenuItem[] = [
     path: '/',
   },
   {
-    id: 'boards',
-    title: 'Доски задач',
-    path: '/boards',
+    id: 'projects',
+    title: 'Проекты',
+    path: '/projects',
   },
 ]
 </script>

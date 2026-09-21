@@ -1,6 +1,6 @@
-import BoardsView from '@/views/BoardsView.vue'
+import ProjectsView from '@/views/ProjectsView.vue'
 import MainView from '@/views/MainView.vue'
-import BoardItemView from '@/views/BoardItemView.vue'
+import ProjectItemView from '@/views/ProjectItemView.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 
@@ -13,14 +13,14 @@ const router = createRouter({
       component: MainView,
     },
     {
-      path: '/boards',
-      name: 'boards',
-      component: BoardsView,
+      path: '/projects',
+      name: 'projects',
+      component: ProjectsView,
     },
     {
-      path: '/boards/:id',
-      name: 'boardItem',
-      component: BoardItemView,
+      path: '/projects/:id',
+      name: 'projectItem',
+      component: ProjectItemView,
     },
     {
       path: '/login',

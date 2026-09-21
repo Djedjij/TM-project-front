@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed, reactive } from 'vue'
-import { TBoardCreateRequest } from '@/api/boards/types'
-import { useBoardsStore } from '@/stores/boards'
+import { TProjectCreateRequest } from '@/api/projects/types'
+import { useProjectsStore } from '@/stores/projects'
 
 const props = defineProps<{
   modelValue: boolean
@@ -14,22 +14,22 @@ const dialogVisible = computed({
   set: (value) => emit('update:modelValue', value),
 })
 
-const { createNewBoard } = useBoardsStore()
-const form = reactive<TBoardCreateRequest>({
+const { createNewProject } = useProjectsStore()
+const form = reactive<TProjectCreateRequest>({
   title: '',
   description: '',
 })
 
 const onSubmit = async () => {
-  await createNewBoard(form)
+  await createNewProject(form)
   dialogVisible.value = false
 }
 </script>
 
 <template>
-  <BaseModal v-model="dialogVisible" title="Новая Доска">
+  <BaseModal v-model="dialogVisible" title="Новый Проект">
     <el-form :model="form" label-width="auto" style="max-width: 600px">
-      <el-form-item label="Название доски">
+      <el-form-item label="Название проекта">
         <el-input v-model="form.title" />
       </el-form-item>
       <el-form-item label="Описание">

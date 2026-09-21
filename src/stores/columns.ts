@@ -8,7 +8,7 @@ export const useColumnsStore = defineStore('columns', () => {
   const isLoading = ref(false)
   const error = ref<string | null>(null)
 
-  const loadColumns = async (boardId: string) => {
+  const loadColumns = async (projectId: string) => {
     try {
       isLoading.value = true
       const res = await getColumns()
@@ -27,12 +27,12 @@ export const useColumnsStore = defineStore('columns', () => {
     }
   }
 
-  const createNewColumn = async (data: TColumnCreateRequest, boardId: string) => {
+  const createNewColumn = async (data: TColumnCreateRequest, projectId: string) => {
     try {
       isLoading.value = true
       const res = await createColumn(data)
       if (res) {
-        loadColumns(boardId)
+        loadColumns(projectId)
       }
     } catch (e) {
       console.log(e)

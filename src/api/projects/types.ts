@@ -1,16 +1,16 @@
-export type TBoard = {
+export type TProject = {
   id: string
   title: string
   description: string
-  status: EBoardStatus
+  status: EProjectStatus
 }
 
-export type TBoardCreateRequest = {
+export type TProjectCreateRequest = {
   title: string
   description: string
 }
 
-export enum EBoardStatus {
+export enum EProjectStatus {
   active = 'active',
   paused = 'paused',
 }

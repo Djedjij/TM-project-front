@@ -62,6 +62,8 @@ apiClient.interceptors.response.use(
       if (error.response.status === 401 && !originalRequest?._retry) {
         originalRequest._retry = true
         try {
+          console.log('originalRequest', originalRequest)
+
           const refreshData = await refreshToken()
           if (refreshData.success) {
             localStorage.setItem('auth_token', refreshData.data.accessToken)

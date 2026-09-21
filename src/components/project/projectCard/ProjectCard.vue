@@ -2,27 +2,27 @@
   <el-card class="wrapper">
     <template #header>
       <div class="wrapper_header">
-        <router-link :to="`/boards/${board.id}`">{{ board.title }}</router-link>
-        <base-tag :type="board.status" :text="boardStatusTitle" />
+        <router-link :to="`/projects/${project.id}`">{{ project.title }}</router-link>
+        <base-tag :type="project.status" :text="projectStatusTitle" />
       </div>
     </template>
   </el-card>
 </template>
 
 <script setup lang="ts">
-import { EBoardStatus, TBoard } from '@/api/boards/types'
+import { EProjectStatus, TProject } from '@/api/projects/types'
 import BaseTag from '@/components/base/tag/BaseTag.vue'
 import { computed } from 'vue'
 
 const props = defineProps<{
-  board: TBoard
+  project: TProject
 }>()
 
-const boardStatusTitle = computed(() => {
-  switch (props.board.status) {
-    case EBoardStatus.active:
+const projectStatusTitle = computed(() => {
+  switch (props.project.status) {
+    case EProjectStatus.active:
       return 'Активный'
-    case EBoardStatus.paused:
+    case EProjectStatus.paused:
       return 'На паузе'
     default:
       return 'Нет статуса'

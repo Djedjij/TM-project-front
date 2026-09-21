@@ -5,7 +5,7 @@ import { useTasksStore } from '@/stores/tasks'
 
 const props = defineProps<{
   modelValue: boolean
-  boardId: string
+  projectId: string
 }>()
 
 const emit = defineEmits(['update:modelValue', 'close'])
@@ -20,7 +20,7 @@ const form = reactive<TTaskCreateRequest>({
   title: '',
   description: '',
   story_points: 0,
-  board_id: props.boardId,
+  project_id: props.projectId,
   column: 'backlog',
 })
 
