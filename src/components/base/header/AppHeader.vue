@@ -1,39 +1,74 @@
 <script setup lang="ts">
-import { ArrowDown, Right } from "@element-plus/icons-vue";
-import { useUserStore } from "@/stores/user";
-import { computed } from "vue";
-const userStore = useUserStore();
+import { computed } from 'vue'
+import { ArrowDown, Right } from '@element-plus/icons-vue'
+import { useUserStore } from '@/stores/user'
 
-const userName = computed(() => userStore.userData?.name || "");
+const userStore = useUserStore()
 
-const { logoutUser } = userStore;
+const userName = computed(() => userStore.userData?.name || '')
+
+const { logoutUser } = userStore
 </script>
 
 <template>
-  <div class="header">
-    <div class="user-panel">
-      <el-dropdown trigger="click">
-        <span class="el-dropdown-link">
-          {{ userName }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
-        </span>
-        <template #dropdown>
-          <el-dropdown-menu>
-            <el-dropdown-item @click="logoutUser" :icon="Right">Logout</el-dropdown-item>
-          </el-dropdown-menu>
-        </template>
-      </el-dropdown>
+  <header class="header">
+    <div class="header__inner">
+      <router-link class="header__brand" :to="{ name: 'home' }">Task Manager</router-link>
+
+      <div class="user-panel">
+        <el-dropdown trigger="click">
+          <span class="el-dropdown-link">
+            {{ userName }}<el-icon class="el-icon--right"><arrow-down /></el-icon>
+          </span>
+          <template #dropdown>
+            <el-dropdown-menu>
+              <el-dropdown-item @click="logoutUser" :icon="Right">Выйти</el-dropdown-item>
+            </el-dropdown-menu>
+          </template>
+        </el-dropdown>
+      </div>
     </div>
-  </div>
+  </header>
 </template>
 
 <style scoped lang="scss">
 @use '@/assets/main.scss' as *;
+
 .header {
   width: 100%;
-  height: 80px;
+  background-color: $white;
   border-bottom: 1px solid $gray-400;
-  padding: 20px;
+
+  &__inner {
+    max-width: 1200px;
+    height: 64px;
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  &__brand {
+    font-size: 20px;
+    font-weight: 600;
+    color: $gray-900;
+    text-decoration: none;
+  }
+}
+
+.user-panel {
   display: flex;
   align-items: center;
+  gap: 8px;
+}
+
+.el-dropdown-link {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  color: $gray-700;
+  outline: none;
 }
 </style>

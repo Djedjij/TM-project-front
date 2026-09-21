@@ -2,6 +2,7 @@ import { ref } from 'vue'
 import { defineStore } from 'pinia'
 import { createTask, getTasks } from '@/api/tasks'
 import { TTask, TTaskCreateRequest } from '@/api/tasks/types'
+import toast from '@/components/base/toast/toast'
 
 export const useTasksStore = defineStore('tasks', () => {
   const tasks = ref<TTask[]>([])
@@ -11,11 +12,11 @@ export const useTasksStore = defineStore('tasks', () => {
     try {
       isLoading.value = true
       const res = await getTasks(projectId)
-      if (res.data) {
-        tasks.value = res.data
-      }
+      tasks.value = res ?? []
     } catch (e) {
       console.log(e)
+      tasks.value = []
+      toast.error('Не удалось загрузить задачи проекта')
     } finally {
       isLoading.value = false
     }
@@ -26,10 +27,16 @@ export const useTasksStore = defineStore('tasks', () => {
       isLoading.value = true
       const res = await createTask(data)
       if (res) {
-        await loadTasks(data.project_id)
+        toast.success('Задача создана')
+        if (data.projectId) {
+          await loadTasks(data.projectId)
+        }
       }
+      return res ?? null
     } catch (e) {
       console.log(e)
+      toast.error('Не удалось создать задачу')
+      return null
     } finally {
       isLoading.value = false
     }

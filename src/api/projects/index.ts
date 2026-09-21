@@ -6,10 +6,14 @@ export const getProjects = async () => {
   return await apiGet<TResponse<TProject[]>>('/projects')
 }
 
+export const getMyProjects = async () => {
+  return await apiGet<TProject[]>('/projects/my')
+}
+
 export const createProject = async (data: TProjectCreateRequest) => {
-  return await apiPost<TProjectCreateRequest>('/projects', data)
+  return await apiPost<TProject>('/projects', data)
 }
 
 export const getProject = async (id: string) => {
-  return await apiGet<TResponse<TProject>>(`/projects/${id}`)
+  return await apiGet<TProject>(`/projects/${id}`)
 }

@@ -1,3 +1,5 @@
+import { ElMessage } from 'element-plus'
+
 type TToastParams = {
   placement?: 'top' | 'top-left' | 'top-right' | 'bottom' | 'bottom-left' | 'bottom-right'
   duration?: number

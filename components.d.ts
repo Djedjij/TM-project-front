@@ -13,7 +13,6 @@ export {}
 declare module 'vue' {
   export interface GlobalComponents {
     AppHeader: typeof import('./src/components/base/header/AppHeader.vue')['default']
-    AppSidebar: typeof import('./src/components/base/AppSidebar.vue')['default']
     BaseButton: typeof import('./src/components/base/button/BaseButton.vue')['default']
     BaseLoader: typeof import('./src/components/base/loader/BaseLoader.vue')['default']
     BaseModal: typeof import('./src/components/base/modal/BaseModal.vue')['default']
@@ -24,7 +23,7 @@ declare module 'vue' {
     CreateTaskModal: typeof import('./src/components/modals/CreateTaskModal.vue')['default']
     ElButton: typeof import('element-plus/es')['ElButton']
     ElCard: typeof import('element-plus/es')['ElCard']
-    ElCol: typeof import('element-plus/es')['ElCol']
+    ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDialog: typeof import('element-plus/es')['ElDialog']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
@@ -34,13 +33,11 @@ declare module 'vue' {
     ElFormItem: typeof import('element-plus/es')['ElFormItem']
     ElIcon: typeof import('element-plus/es')['ElIcon']
     ElInput: typeof import('element-plus/es')['ElInput']
-    ElMenu: typeof import('element-plus/es')['ElMenu']
-    ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
-    ElRow: typeof import('element-plus/es')['ElRow']
     ElTag: typeof import('element-plus/es')['ElTag']
     ProjectCard: typeof import('./src/components/project/projectCard/ProjectCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TaskCard: typeof import('./src/components/project/taskCard/TaskCard.vue')['default']
   }
   export interface GlobalDirectives {
     vLoading: typeof import('element-plus/es')['ElLoadingDirective']
@@ -50,7 +47,6 @@ declare module 'vue' {
 // For TSX support
 declare global {
   const AppHeader: typeof import('./src/components/base/header/AppHeader.vue')['default']
-  const AppSidebar: typeof import('./src/components/base/AppSidebar.vue')['default']
   const BaseButton: typeof import('./src/components/base/button/BaseButton.vue')['default']
   const BaseLoader: typeof import('./src/components/base/loader/BaseLoader.vue')['default']
   const BaseModal: typeof import('./src/components/base/modal/BaseModal.vue')['default']
@@ -61,7 +57,7 @@ declare global {
   const CreateTaskModal: typeof import('./src/components/modals/CreateTaskModal.vue')['default']
   const ElButton: typeof import('element-plus/es')['ElButton']
   const ElCard: typeof import('element-plus/es')['ElCard']
-  const ElCol: typeof import('element-plus/es')['ElCol']
+  const ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
   const ElDialog: typeof import('element-plus/es')['ElDialog']
   const ElDropdown: typeof import('element-plus/es')['ElDropdown']
   const ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
@@ -71,11 +67,9 @@ declare global {
   const ElFormItem: typeof import('element-plus/es')['ElFormItem']
   const ElIcon: typeof import('element-plus/es')['ElIcon']
   const ElInput: typeof import('element-plus/es')['ElInput']
-  const ElMenu: typeof import('element-plus/es')['ElMenu']
-  const ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
-  const ElRow: typeof import('element-plus/es')['ElRow']
   const ElTag: typeof import('element-plus/es')['ElTag']
   const ProjectCard: typeof import('./src/components/project/projectCard/ProjectCard.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
+  const TaskCard: typeof import('./src/components/project/taskCard/TaskCard.vue')['default']
 }

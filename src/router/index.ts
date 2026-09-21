@@ -1,7 +1,6 @@
-import ProjectsView from '@/views/ProjectsView.vue'
+import { createRouter, createWebHistory } from 'vue-router'
 import MainView from '@/views/MainView.vue'
 import ProjectItemView from '@/views/ProjectItemView.vue'
-import { createRouter, createWebHistory } from 'vue-router'
 import LoginView from '@/views/LoginView.vue'
 
 const router = createRouter({
@@ -14,13 +13,13 @@ const router = createRouter({
     },
     {
       path: '/projects',
-      name: 'projects',
-      component: ProjectsView,
+      redirect: { name: 'home' },
     },
     {
       path: '/projects/:id',
       name: 'projectItem',
       component: ProjectItemView,
+      props: true,
     },
     {
       path: '/login',

@@ -1,11 +1,10 @@
 import { apiGet, apiPost } from '@/api/client'
 import { TTask, TTaskCreateRequest } from './types'
-import { TResponse } from '../types'
 
-export const getTasks = async (id: string) => {
-  return await apiGet<TResponse<TTask[]>>(`/todos/?project_id=${id}`)
+export const getTasks = async (projectId: string) => {
+  return await apiGet<TTask[]>(`/tasks/project/${projectId}`)
 }
 
 export const createTask = async (data: TTaskCreateRequest) => {
-  return await apiPost<TTaskCreateRequest>('/todos', data)
+  return await apiPost<TTask>('/tasks', data)
 }
