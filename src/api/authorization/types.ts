@@ -5,10 +5,7 @@ export type TUserResponse = {
 
 export type TRefreshTokenResponse = {
   success: boolean
-  data: {
-    user: TUserResponse
-    accessToken: string
-  }
+  accessToken: string
 }
 
 export type TInitializeResponse = {

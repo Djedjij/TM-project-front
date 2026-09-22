@@ -62,15 +62,20 @@ apiClient.interceptors.response.use(
       if (error.response.status === 401 && !originalRequest?._retry) {
         originalRequest._retry = true
         try {
-          console.log('originalRequest', originalRequest)
-
           const refreshData = await refreshToken()
-          if (refreshData.success) {
-            localStorage.setItem('auth_token', refreshData.data.accessToken)
+          if (refreshData && refreshData.success) {
+            const newAccessToken = refreshData.accessToken
+            localStorage.setItem('auth_token', newAccessToken)
+
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${newAccessToken}`
+            }
+            return apiClient(originalRequest)
           }
         } catch (e) {
           localStorage.removeItem('auth_token')
           window.location.href = '/login'
+          return Promise.reject(e)
         }
       }
       return Promise.reject(new ApiError('API Error', { status, data }))

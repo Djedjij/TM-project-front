@@ -4,10 +4,10 @@ import { storeToRefs } from 'pinia'
 import BaseButton from '@/components/base/button/BaseButton.vue'
 import BaseStub from '@/components/base/stub/BaseStub.vue'
 import BaseTag from '@/components/base/tag/BaseTag.vue'
-import TaskCard from '@/components/project/taskCard/TaskCard.vue'
 import { useProjectsStore } from '@/stores/projects'
 import { useTasksStore } from '@/stores/tasks'
 import { EProjectStatus } from '@/api/projects/types'
+import ProjectBoard from '@/components/project/projectBoard/ProjectBoard.vue'
 
 const props = defineProps<{
   id: string
@@ -82,15 +82,7 @@ const closeCreateTaskModal = () => {
           <h2 class="tasks__title">Задачи</h2>
           <span class="tasks__count">{{ tasks.length }}</span>
         </div>
-
-        <BaseStub
-          v-if="!tasks.length && !isTasksLoading"
-          description="В проекте пока нет задач. Создайте первую задачу"
-        />
-
-        <div v-else class="tasks__list">
-          <TaskCard v-for="task in tasks" :key="task.id" :task="task" />
-        </div>
+        <ProjectBoard />
       </section>
     </div>
 
