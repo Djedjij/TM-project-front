@@ -5,7 +5,7 @@ import { Delete, MoreFilled, View } from '@element-plus/icons-vue'
 import BaseContextMenu from '@/components/base/contextMenu/BaseContextMenu.vue'
 import BaseTag from '@/components/base/tag/BaseTag.vue'
 import { TContextMenuItem } from '@/components/base/contextMenu/types'
-import { TTask } from '@/api/tasks/types'
+import { ETaskStatus, TTask } from '@/api/tasks/types'
 
 const props = defineProps<{
   task: TTask
@@ -29,12 +29,10 @@ const openMenuAt = (x: number, y: number) => {
   isMenuOpen.value = true
 }
 
-/** ПКМ по карточке — меню появляется под курсором */
 const onContextMenu = (event: MouseEvent) => {
   openMenuAt(event.clientX, event.clientY)
 }
 
-/** Клик по кнопке «⋯» — меню появляется под кнопкой */
 const onMoreClick = (event: MouseEvent) => {
   const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
   openMenuAt(rect.left, rect.bottom + MENU_OFFSET)
@@ -52,6 +50,21 @@ const createdAt = computed(() =>
 const dueAt = computed(() => (props.task.dueAt ? dayjs(props.task.dueAt).format('DD.MM.YYYY') : ''))
 
 const dueTitle = computed(() => (dueAt.value ? `до ${dueAt.value}` : ''))
+
+const taskBorderColor = computed(() => {
+  switch (props.task?.status) {
+    case ETaskStatus.cancelled:
+      return '#f56c6c'
+    case ETaskStatus.created:
+      return '#909399'
+    case ETaskStatus.in_progress:
+      return '#409eff'
+    case ETaskStatus.done:
+      return '#67c23a'
+    default:
+      return '#909399'
+  }
+})
 
 const isOverdue = computed(
   () => !!props.task.dueAt && dayjs(props.task.dueAt).isBefore(dayjs(), 'day'),
@@ -73,6 +86,7 @@ const hiddenTagsCount = computed(() => Math.max(tags.value.length - visibleTags.
     @keydown.enter.self="emit('open')"
     @keydown.space.prevent.self="emit('open')"
   >
+    <div class="task__border" :style="{ backgroundColor: taskBorderColor }"></div>
     <div class="task__header">
       <h4 class="task__title">{{ task.title }}</h4>
       <div class="task__header-actions">
@@ -125,7 +139,7 @@ const hiddenTagsCount = computed(() => Math.max(tags.value.length - visibleTags.
     background-color var(--app-transition-slow),
     border-color var(--app-transition-slow);
 
-  &::before {
+  &__border {
     content: '';
     position: absolute;
     top: 0;
@@ -136,7 +150,6 @@ const hiddenTagsCount = computed(() => Math.max(tags.value.length - visibleTags.
   }
 
   &:hover {
-    transform: translateY(-2px);
     box-shadow: var(--app-shadow-md);
   }
 
