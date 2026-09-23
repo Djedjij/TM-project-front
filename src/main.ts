@@ -7,6 +7,8 @@ import { useThemeStore } from './stores/theme'
 // Тёмная тема Element Plus и стили сообщений (ElMessage) — до стилей приложения
 import 'element-plus/theme-chalk/dark/css-vars.css'
 import 'element-plus/es/components/message/style/css'
+// ElMessageBox используется в панели задачи, стили подключаем вручную (компонент вызывается программно)
+import 'element-plus/es/components/message-box/style/css'
 import './assets/main.scss'
 
 const app = createApp(App)

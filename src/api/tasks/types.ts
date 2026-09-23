@@ -15,13 +15,20 @@ export type TTask = {
   userId?: string | null
   projectId?: string | null
   status?: ETaskStatus
+  tag?: string[] | null
 }
+
+/** Ограничения поля tag на сервере (schemas/taskSchema.ts) */
+export const TASK_TAG_MAX_COUNT = 20
+export const TASK_TAG_MAX_LENGTH = 30
 
 export type TTaskCreateRequest = {
   title: string
   description?: string | null
   dueAt?: string | null
   projectId?: string | null
+  status?: ETaskStatus
+  tag?: string[] | null
 }
 
 export type TTaskUpdateRequest = {
@@ -30,4 +37,5 @@ export type TTaskUpdateRequest = {
   dueAt?: string | null
   projectId?: string | null
   status?: ETaskStatus
+  tag?: string[] | null
 }

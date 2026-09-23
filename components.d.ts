@@ -25,6 +25,7 @@ declare module 'vue' {
     ElCard: typeof import('element-plus/es')['ElCard']
     ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
     ElDialog: typeof import('element-plus/es')['ElDialog']
+    ElDrawer: typeof import('element-plus/es')['ElDrawer']
     ElDropdown: typeof import('element-plus/es')['ElDropdown']
     ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
     ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
@@ -39,7 +40,9 @@ declare module 'vue' {
     ProjectCard: typeof import('./src/components/project/projectCard/ProjectCard.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    TagsInput: typeof import('./src/components/base/tagsInput/TagsInput.vue')['default']
     TaskCard: typeof import('./src/components/project/taskCard/TaskCard.vue')['default']
+    TaskDrawer: typeof import('./src/components/project/taskDrawer/TaskDrawer.vue')['default']
     ThemeToggle: typeof import('./src/components/base/themeToggle/ThemeToggle.vue')['default']
   }
   export interface GlobalDirectives {
@@ -62,6 +65,7 @@ declare global {
   const ElCard: typeof import('element-plus/es')['ElCard']
   const ElDatePicker: typeof import('element-plus/es')['ElDatePicker']
   const ElDialog: typeof import('element-plus/es')['ElDialog']
+  const ElDrawer: typeof import('element-plus/es')['ElDrawer']
   const ElDropdown: typeof import('element-plus/es')['ElDropdown']
   const ElDropdownItem: typeof import('element-plus/es')['ElDropdownItem']
   const ElDropdownMenu: typeof import('element-plus/es')['ElDropdownMenu']
@@ -76,6 +80,8 @@ declare global {
   const ProjectCard: typeof import('./src/components/project/projectCard/ProjectCard.vue')['default']
   const RouterLink: typeof import('vue-router')['RouterLink']
   const RouterView: typeof import('vue-router')['RouterView']
+  const TagsInput: typeof import('./src/components/base/tagsInput/TagsInput.vue')['default']
   const TaskCard: typeof import('./src/components/project/taskCard/TaskCard.vue')['default']
+  const TaskDrawer: typeof import('./src/components/project/taskDrawer/TaskDrawer.vue')['default']
   const ThemeToggle: typeof import('./src/components/base/themeToggle/ThemeToggle.vue')['default']
 }

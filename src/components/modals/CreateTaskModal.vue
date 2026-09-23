@@ -2,8 +2,9 @@
 import { computed, reactive, watch } from 'vue'
 import BaseButton from '@/components/base/button/BaseButton.vue'
 import BaseModal from '@/components/base/modal/BaseModal.vue'
+import TagsInput from '@/components/base/tagsInput/TagsInput.vue'
 import toast from '@/components/base/toast/toast'
-import { TTaskCreateRequest } from '@/api/tasks/types'
+import { TASK_TAG_MAX_COUNT, TASK_TAG_MAX_LENGTH } from '@/api/tasks/types'
 import { useTasksStore } from '@/stores/tasks'
 
 const props = defineProps<{
@@ -20,13 +21,21 @@ const dialogVisible = computed({
 
 const { createNewTask } = useTasksStore()
 
-const createEmptyForm = (): TTaskCreateRequest => ({
+type TTaskForm = {
+  title: string
+  description: string
+  dueAt: string | null
+  tag: string[]
+}
+
+const createEmptyForm = (): TTaskForm => ({
   title: '',
   description: '',
   dueAt: null,
+  tag: [],
 })
 
-const form = reactive<TTaskCreateRequest>(createEmptyForm())
+const form = reactive<TTaskForm>(createEmptyForm())
 
 watch(dialogVisible, (isOpen) => {
   if (isOpen) {
@@ -42,9 +51,10 @@ const onSubmit = async () => {
 
   const createdTask = await createNewTask({
     title: form.title.trim(),
-    description: form.description?.trim() || null,
+    description: form.description.trim() || null,
     dueAt: form.dueAt || null,
     projectId: props.projectId,
+    tag: form.tag,
   })
 
   if (createdTask) {
@@ -73,6 +83,13 @@ const onSubmit = async () => {
           type="date"
           value-format="YYYY-MM-DD"
           placeholder="Выберите дату"
+        />
+      </el-form-item>
+      <el-form-item label="Теги">
+        <TagsInput
+          v-model="form.tag"
+          :max-tags="TASK_TAG_MAX_COUNT"
+          :max-length="TASK_TAG_MAX_LENGTH"
         />
       </el-form-item>
       <div class="form__actions">

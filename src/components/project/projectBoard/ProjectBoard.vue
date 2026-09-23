@@ -1,44 +1,34 @@
 <script setup lang="ts">
-import { reactive, watch } from 'vue'
+import { computed, reactive, ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import { VueDraggableNext as draggable, type DragChangeEvent } from 'vue-draggable-next'
 import BaseStub from '@/components/base/stub/BaseStub.vue'
 import TaskCard from '@/components/project/taskCard/TaskCard.vue'
+import TaskDrawer from '@/components/project/taskDrawer/TaskDrawer.vue'
+import {
+  TASK_STATUSES,
+  TASK_STATUS_HINTS,
+  TASK_STATUS_TITLES,
+} from '@/components/project/taskStatus'
 import { useTasksStore } from '@/stores/tasks'
 import { ETaskStatus, TTask } from '@/api/tasks/types'
 
-type TBoardColumn = {
-  status: ETaskStatus
-  title: string
-  hint: string
-}
-
-const BOARD_COLUMNS: TBoardColumn[] = [
-  {
-    status: ETaskStatus.created,
-    title: 'Новые',
-    hint: 'Здесь оказываются только что созданные задачи',
-  },
-  {
-    status: ETaskStatus.in_progress,
-    title: 'В работе',
-    hint: 'Перетащите задачу, чтобы взять её в работу',
-  },
-  {
-    status: ETaskStatus.done,
-    title: 'Выполнены',
-    hint: 'Перетащите сюда завершённые задачи',
-  },
-  {
-    status: ETaskStatus.cancelled,
-    title: 'Отменены',
-    hint: 'Перетащите сюда задачи, которые больше не нужно делать',
-  },
-]
+/** Задержка, в течение которой клик после перетаскивания не открывает панель задачи */
+const DRAG_CLICK_DELAY = 200
 
 const tasksStore = useTasksStore()
 
 const { tasks, isLoading } = storeToRefs(tasksStore)
+
+const selectedTaskId = ref<string | null>(null)
+const isDrawerOpen = ref(false)
+const isDragging = ref(false)
+
+let dragEndedAt = 0
+
+const selectedTask = computed(
+  () => tasks.value.find((task) => task.id === selectedTaskId.value) ?? null,
+)
 
 // vue-draggable-next мутирует массивы напрямую, поэтому у каждой колонки собственный список
 const columns = reactive<Record<ETaskStatus, TTask[]>>({
@@ -53,7 +43,7 @@ const getTaskStatus = (task: TTask) => task.status ?? ETaskStatus.created
 const getColumnTasks = (status: ETaskStatus) => columns[status]
 
 const syncColumns = () => {
-  const grouped = new Map<ETaskStatus, TTask[]>(BOARD_COLUMNS.map((column) => [column.status, []]))
+  const grouped = new Map<ETaskStatus, TTask[]>(TASK_STATUSES.map((status) => [status, []]))
 
   tasks.value.forEach((task) => {
     const status = getTaskStatus(task)
@@ -61,9 +51,9 @@ const syncColumns = () => {
     list?.push(task)
   })
 
-  BOARD_COLUMNS.forEach((column) => {
-    const list = columns[column.status]
-    list.splice(0, list.length, ...(grouped.get(column.status) ?? []))
+  TASK_STATUSES.forEach((status) => {
+    const list = columns[status]
+    list.splice(0, list.length, ...(grouped.get(status) ?? []))
   })
 }
 
@@ -76,6 +66,27 @@ const onTaskMove = (status: ETaskStatus, event: DragChangeEvent<TTask>) => {
 
   tasksStore.updateTaskStatus(task.id, status)
 }
+
+const openTask = (task: TTask) => {
+  // Клик, завершивший перетаскивание, не должен открывать панель задачи
+  if (isDragging.value || Date.now() - dragEndedAt < DRAG_CLICK_DELAY) return
+
+  selectedTaskId.value = task.id
+  isDrawerOpen.value = true
+}
+
+const onDragStart = () => {
+  isDragging.value = true
+}
+
+const onDragEnd = () => {
+  isDragging.value = false
+  dragEndedAt = Date.now()
+}
+
+const onTaskDeleted = () => {
+  selectedTaskId.value = null
+}
 </script>
 
 <template>
@@ -86,19 +97,19 @@ const onTaskMove = (status: ETaskStatus, event: DragChangeEvent<TTask>) => {
 
   <div v-else class="board">
     <section
-      v-for="column in BOARD_COLUMNS"
-      :key="column.status"
+      v-for="status in TASK_STATUSES"
+      :key="status"
       class="board__column"
-      :data-status="column.status"
+      :data-status="status"
     >
       <header class="board__header">
         <span class="board__marker" />
-        <h3 class="board__title">{{ column.title }}</h3>
-        <span class="board__count">{{ getColumnTasks(column.status).length }}</span>
+        <h3 class="board__title">{{ TASK_STATUS_TITLES[status] }}</h3>
+        <span class="board__count">{{ getColumnTasks(status).length }}</span>
       </header>
 
       <draggable
-        :list="getColumnTasks(column.status)"
+        :list="getColumnTasks(status)"
         group="project-tasks"
         item-key="id"
         :sort="false"
@@ -106,14 +117,25 @@ const onTaskMove = (status: ETaskStatus, event: DragChangeEvent<TTask>) => {
         ghost-class="board__card_ghost"
         drag-class="board__card_drag"
         :animation="150"
-        @change="onTaskMove(column.status, $event)"
+        @change="onTaskMove(status, $event)"
+        @start="onDragStart"
+        @end="onDragEnd"
       >
-        <TaskCard v-for="task in getColumnTasks(column.status)" :key="task.id" :task="task" />
+        <TaskCard
+          v-for="task in getColumnTasks(status)"
+          :key="task.id"
+          :task="task"
+          @open="openTask(task)"
+        />
       </draggable>
 
-      <p v-if="!getColumnTasks(column.status).length" class="board__empty">{{ column.hint }}</p>
+      <p v-if="!getColumnTasks(status).length" class="board__empty">
+        {{ TASK_STATUS_HINTS[status] }}
+      </p>
     </section>
   </div>
+
+  <TaskDrawer v-model="isDrawerOpen" :task="selectedTask" @deleted="onTaskDeleted" />
 </template>
 
 <style scoped lang="scss">
