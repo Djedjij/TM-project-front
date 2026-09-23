@@ -5,6 +5,7 @@ import { VueDraggableNext as draggable, type DragChangeEvent } from 'vue-draggab
 import BaseStub from '@/components/base/stub/BaseStub.vue'
 import TaskCard from '@/components/project/taskCard/TaskCard.vue'
 import TaskDrawer from '@/components/project/taskDrawer/TaskDrawer.vue'
+import { confirmTaskDelete } from '@/components/project/taskActions'
 import {
   TASK_STATUSES,
   TASK_STATUS_HINTS,
@@ -87,6 +88,18 @@ const onDragEnd = () => {
 const onTaskDeleted = () => {
   selectedTaskId.value = null
 }
+
+/** Удаление задачи из контекстного меню карточки */
+const onTaskDelete = async (task: TTask) => {
+  if (!(await confirmTaskDelete(task.title))) return
+
+  const isDeleted = await tasksStore.deleteTaskById(task.id)
+
+  if (isDeleted && selectedTaskId.value === task.id) {
+    onTaskDeleted()
+    isDrawerOpen.value = false
+  }
+}
 </script>
 
 <template>
@@ -126,6 +139,7 @@ const onTaskDeleted = () => {
           :key="task.id"
           :task="task"
           @open="openTask(task)"
+          @delete="onTaskDelete(task)"
         />
       </draggable>
 

@@ -1,14 +1,49 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import dayjs from 'dayjs'
+import { Delete, MoreFilled, View } from '@element-plus/icons-vue'
+import BaseContextMenu from '@/components/base/contextMenu/BaseContextMenu.vue'
 import BaseTag from '@/components/base/tag/BaseTag.vue'
+import { TContextMenuItem } from '@/components/base/contextMenu/types'
 import { TTask } from '@/api/tasks/types'
 
 const props = defineProps<{
   task: TTask
 }>()
 
-const emit = defineEmits(['open'])
+const emit = defineEmits(['open', 'delete'])
+
+/** Отступ меню действий от кнопки «⋯» */
+const MENU_OFFSET = 6
+
+const isMenuOpen = ref(false)
+const menuPosition = ref({ x: 0, y: 0 })
+
+const menuItems: TContextMenuItem[] = [
+  { key: 'open', label: 'Открыть задачу', icon: View },
+  { key: 'delete', label: 'Удалить задачу', icon: Delete, danger: true },
+]
+
+const openMenuAt = (x: number, y: number) => {
+  menuPosition.value = { x, y }
+  isMenuOpen.value = true
+}
+
+/** ПКМ по карточке — меню появляется под курсором */
+const onContextMenu = (event: MouseEvent) => {
+  openMenuAt(event.clientX, event.clientY)
+}
+
+/** Клик по кнопке «⋯» — меню появляется под кнопкой */
+const onMoreClick = (event: MouseEvent) => {
+  const rect = (event.currentTarget as HTMLElement).getBoundingClientRect()
+  openMenuAt(rect.left, rect.bottom + MENU_OFFSET)
+}
+
+const onMenuSelect = (key: string) => {
+  if (key === 'open') emit('open')
+  if (key === 'delete') emit('delete')
+}
 
 const createdAt = computed(() =>
   props.task.createdAt ? dayjs(props.task.createdAt).format('DD.MM.YYYY') : '',
@@ -34,12 +69,23 @@ const hiddenTagsCount = computed(() => Math.max(tags.value.length - visibleTags.
     role="button"
     tabindex="0"
     @click="emit('open')"
-    @keydown.enter="emit('open')"
-    @keydown.space.prevent="emit('open')"
+    @contextmenu.prevent="onContextMenu"
+    @keydown.enter.self="emit('open')"
+    @keydown.space.prevent.self="emit('open')"
   >
     <div class="task__header">
       <h4 class="task__title">{{ task.title }}</h4>
-      <BaseTag v-if="dueTitle" :type="isOverdue ? 'danger' : 'warning'" :text="dueTitle" />
+      <div class="task__header-actions">
+        <BaseTag v-if="dueTitle" :type="isOverdue ? 'danger' : 'warning'" :text="dueTitle" />
+        <button
+          class="task__more"
+          type="button"
+          aria-label="Действия с задачей"
+          @click.stop="onMoreClick"
+        >
+          <el-icon><MoreFilled /></el-icon>
+        </button>
+      </div>
     </div>
 
     <p v-if="task.description" class="task__description">{{ task.description }}</p>
@@ -50,6 +96,14 @@ const hiddenTagsCount = computed(() => Math.max(tags.value.length - visibleTags.
     </div>
 
     <span v-if="createdAt" class="task__date">Создана {{ createdAt }}</span>
+
+    <BaseContextMenu
+      v-model="isMenuOpen"
+      :x="menuPosition.x"
+      :y="menuPosition.y"
+      :items="menuItems"
+      @select="onMenuSelect"
+    />
   </div>
 </template>
 
@@ -95,6 +149,45 @@ const hiddenTagsCount = computed(() => Math.max(tags.value.length - visibleTags.
     align-items: flex-start;
     justify-content: space-between;
     gap: 8px;
+  }
+
+  &__header-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex: none;
+  }
+
+  &__more {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    font-size: 16px;
+    color: var(--el-text-color-secondary);
+    background-color: transparent;
+    border: none;
+    border-radius: var(--app-radius-sm);
+    opacity: 0.6;
+    cursor: pointer;
+    transition:
+      color var(--app-transition),
+      background-color var(--app-transition),
+      opacity var(--app-transition);
+
+    &:hover,
+    &:focus-visible {
+      color: var(--el-color-primary);
+      background-color: var(--app-surface-muted);
+      opacity: 1;
+      outline: none;
+    }
+  }
+
+  &:hover &__more {
+    opacity: 1;
   }
 
   &__title {
